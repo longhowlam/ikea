@@ -1,3 +1,4 @@
+### script was needed to import all the daily scraped files
 
 library(dplyr)
 library(lubridate)
