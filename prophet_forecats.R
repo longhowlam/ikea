@@ -48,11 +48,11 @@ p +
 BillyTotal = AllBilliesVerkocht2 %>% 
   group_by(datum) %>%
   summarise(y = sum(verkocht, na.rm=TRUE)) %>%
-  rename(ds = datum) %>%
-  filter(y < 600)
+  rename(ds = datum)
 
 
-BillyF = prophet(BillyTotal, n.changepoints = 10, changepoint.prior.scale = 0.0132 )
+BillyF = prophet(BillyTotal)
+BillyF = prophet(BillyTotal, n.changepoints = 55, weekly.seasonality = TRUE , yearly.seasonality = TRUE, daily.seasonality = TRUE)
 future <- make_future_dataframe(BillyF, periods = 90)
 #tail(future)
 
