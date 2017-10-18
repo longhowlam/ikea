@@ -48,19 +48,28 @@ p +
 BillyTotal = AllBilliesVerkocht2 %>% 
   group_by(datum) %>%
   summarise(y = sum(verkocht, na.rm=TRUE)) %>%
+  filter(y < 600) %>%
   rename(ds = datum)
 
 
 BillyF = prophet(BillyTotal)
-BillyF = prophet(BillyTotal, n.changepoints = 55, weekly.seasonality = TRUE , yearly.seasonality = TRUE, daily.seasonality = TRUE)
-future <- make_future_dataframe(BillyF, periods = 90)
+
+BillyF = prophet(
+  BillyTotal, 
+  weekly.seasonality = TRUE ,
+  yearly.seasonality = TRUE, 
+  daily.seasonality = TRUE
+)
+future = make_future_dataframe(BillyF, periods = 90)
+
+
 #tail(future)
 
 forecast <- predict(BillyF, future)
 #tail(forecast[c('ds', 'yhat', 'yhat_lower', 'yhat_upper')])
 
 zz = plot(BillyF, forecast)
-zz + ggtitle("The IKEA Billy Index") + scale_y_continuous("Index")
+zz + ggtitle("The IKEA Billy Index") + scale_y_continuous("Index") 
 
 
 prophet_plot_components(BillyF, forecast)
