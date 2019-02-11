@@ -2,8 +2,9 @@ library(prophet)
 library(dplyr)
 library(corrplot)
 library(ggplot2)
+library(readr)
 
-######################################################
+########## some plots ############################################
 ## plot by day of week and by hour
 AllBilliesVerkocht2 = readRDS("AllBilliesVerkocht2.Rds")
 
@@ -42,7 +43,7 @@ p +
 
 
 
-######################################################################
+######### PROPHET #############################################################
 
 
 BillyTotal = AllBilliesVerkocht2 %>% 
@@ -51,6 +52,7 @@ BillyTotal = AllBilliesVerkocht2 %>%
   filter(y < 600) %>%
   rename(ds = datum)
 
+BillyTotal %>% ggplot(aes(x=ds,y=y)) + geom_point()
 
 BillyF = prophet(BillyTotal)
 
@@ -75,7 +77,7 @@ zz + ggtitle("The IKEA Billy Index") + scale_y_continuous("Index")
 prophet_plot_components(BillyF, forecast)
 
 
-##########################################################################################
+############    KNMI data##############################################################################
 
 ### KNMI weather data
 KNMI_20170309 = read_csv("~/RProjects/IkeaAnalytics/KNMI_20170309.txt")
